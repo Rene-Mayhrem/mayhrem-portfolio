@@ -25,6 +25,9 @@ const Header = () => {
                 </div>
                 <span className="text-xl font-bold-gradient-text">René Cruz</span>
             </motion.div>
+
+            
+
         </div>
       </nav>
     </motion.header>
