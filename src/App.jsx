@@ -10,13 +10,11 @@ function App() {
 
   return (
     <>
-      <Helmet>
         <title>René Cruz | DevOps Engineer / Java Developer</title>
         <meta name='description'content='The portfolio of Rene Cruz, a DevOps Engineer & Java Developer specializing in cloud automation, Kubernetes, and scalable infrastructure solutions.'/>
         <meta property='og:title' content='Rene Cruz | DevOps Engineer'/>
         <meta property='og:description' content='Portfolio'/>
-      </Helmet>
-      <Header></Header>
+      <Header />
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
