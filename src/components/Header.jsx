@@ -5,7 +5,7 @@ import { Cloud, Zap } from "lucide-react";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [];
+
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
