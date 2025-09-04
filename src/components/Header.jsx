@@ -3,7 +3,17 @@ import { useState } from "react";
 import { Cloud, Zap } from "lucide-react";
 
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [];
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth'});
+      setIsOpen(false);
+    }
+  };
 
   return (
     <motion.header
@@ -25,9 +35,18 @@ const Header = () => {
                 </div>
                 <span className="text-xl font-bold-gradient-text">René Cruz</span>
             </motion.div>
-
-            
-
+            {/* Desktop navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              {['about', 'skills', 'projects', 'github-stats', 'contact'].map((item) => (
+                <button 
+                  key={item}
+                  onClick={() => scrollToSection(item)}
+                  className="text-primary-themed/80 hover:text-primary-themed transition-colors capitalize font-medium"
+                >
+                  {item.replace('-', ' ')}
+                </button>
+              ))}
+            </div>
         </div>
       </nav>
     </motion.header>
