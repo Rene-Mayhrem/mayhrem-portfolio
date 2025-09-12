@@ -7,7 +7,7 @@ import { useTheme } from "../lib/useTheme";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [theme, setTheme] = useTheme();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,14 +20,14 @@ const Header = () => {
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth'});
+      element.scrollIntoView({ behavior: 'smooth' });
       setIsOpen(false);
     }
   };
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
-  }
+  };
 
   return (
     <motion.header
@@ -40,14 +40,14 @@ const Header = () => {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
             <motion.div
-                whileHover={{ scale: 10.5 }}
+                whileHover={{ scale: 1.05 }}
                 className="flex items-center space-x-2"
             >
                 <div className="relative">
-                    <Cloud className="2-8 h-8 text-blue-400" />
+                    <Cloud className="w-8 h-8 text-blue-400" />
                     <Zap className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />
                 </div>
-                <span className="text-xl font-bold-gradient-text">René Cruz</span>
+                <span className="text-xl font-bold gradient-text">René Cruz</span>
             </motion.div>
             {/* Desktop navigation */}
             <div className="hidden md:flex items-center space-x-6">
@@ -66,7 +66,7 @@ const Header = () => {
                 onClick={toggleTheme}
                 className = 'text-primary-themed'
               >
-                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 "/>
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"/>
                 <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"/>
                 <span className="sr-only">Toggle theme</span>
               </Button>
