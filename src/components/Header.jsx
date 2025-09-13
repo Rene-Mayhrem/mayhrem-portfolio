@@ -1,6 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Cloud, Menu, Moon, Sun, Zap } from "lucide-react";
+import { Cloud, Menu, Moon, Sun, X, Zap } from "lucide-react";
 import Button from "./ui/button";
 import { useTheme } from "../lib/useTheme";
 
@@ -78,7 +79,7 @@ const Header = () => {
               className='md:hidden text-primary-themed'
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? <x className='w-6 h-6'/> : <Menu className='w-g h-6'/>}
+              {isOpen ? <X className='w-6 h-6'/> : <Menu className='w-6 h-6'/>}
             </Button>
         </div>
 

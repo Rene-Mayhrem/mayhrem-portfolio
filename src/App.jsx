@@ -1,6 +1,5 @@
 
 import Header from './components/Header'
-import './App.css'
 import ParticleBackground from './components/ParticleBackground'
 
 function App() {
