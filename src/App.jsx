@@ -1,6 +1,7 @@
 
 import About from './components/About'
 import Header from './components/Header'
+import Hero from './components/Hero'
 import ParticleBackground from './components/ParticleBackground'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <ParticleBackground />
         <Header />
         <main className="relative z-10">
+          <Hero />
           <About />
         </main>
       </div>

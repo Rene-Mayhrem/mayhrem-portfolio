@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Github, Linkedin, Mail, Terminal } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/use-toast';
+import Button from './ui/button';
+import { Toast }  from './ui/toast';
 
 const Hero = () => {
   const [displayText, setDisplayText] = useState('');
@@ -31,13 +31,18 @@ const Hero = () => {
   };
 
   const handleSocialClick = (platform) => {
-    if (platform === 'GitHub') {
-      window.open('https://github.com/Rene-Mayhrem', '_blank', 'noopener,noreferrer');
-    } else {
-       toast({
-        title: `🚧 ${platform} Link`,
-        description: "This feature isn't implemented yet—but don't worry! You can request it in your next prompt! 🚀"
-      });
+    switch(platform) {
+        case 'Github':
+            window.open('https://github.com/Rene-Mayhrem', '_blank', 'noopener,noreferrer');
+            break;
+        case 'LinkedIn':
+            window.open('https://www.linkedin.com/in/renecruz-1202r/', '_blank', 'noopener,noreferrer');
+            break;
+        case 'Email':
+            window.open('https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSDZqtdKCMcXfpWBfqgBNqDcmfZFwHxQtBhKJwMDRbpJZxsrDrgPdCQVTJJjDDMTFNHMPVrV', '_blank', 'noopener,noreferrer');
+            break;
+        default:
+            console.log('xd');
     }
   };
 
@@ -58,8 +63,8 @@ const Hero = () => {
           >
             <div className="relative inline-block">
               <img   
-                alt="Portrait of Rene Mayhrem, a Senior DevOps Engineer"
-                className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto glass neon-glow" src="https://images.unsplash.com/photo-1541169895217-65b9edc7fae2" />
+                alt="Portrait of Rene Mayhrem, DevOps Junior"
+                className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto glass neon-glow" src="--" />
               <div className="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full flex items-center justify-center">
                 <Terminal className="w-4 h-4 text-white" />
               </div>
