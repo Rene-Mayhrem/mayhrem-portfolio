@@ -1,4 +1,5 @@
-import { Award, Calendar, GitCommit, MapPin } from "lucide-react";
+/* eslint-disable no-unused-vars */
+import { Award, Calendar, GitCommit, Icon, MapPin } from "lucide-react";
 import { motion } from 'framer-motion';
 
 const About = () => {
@@ -56,8 +57,26 @@ const About = () => {
                                 With a background in Software Development, I transitioned to DevOps to bridge the gap between writing code and deploying it effectively. I believe in the power of "Infrastructure as Code" and robust automation to create self-healing, scalable systems. My goal is to empower development teams to ship features faster and more reliably.
                             </p>
                             <p className="text-white80 leading-relaxed">
-
+                                Outside of architecting cloud solutions. I am an
                             </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            {stats.map(({icon: Icon, label, value}, index) => (
+                                <motion.div
+                                    key={label}
+                                    initial={{ opacity: 0, y:20, rotateX: -20 }}
+                                    whileInView={{ opacity: 1, y:0, rotateX: 0 }}
+                                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                                    viewport={{ once: true }}
+                                    className="glass rounded-xl p-4 text-center hover-lift"
+                                    style={{ transformStyle: 'preserve-3d' }}
+                                >
+                                    <Icon className="w-8-h-8 text-blue-400 mx-auto mb-2" />
+                                    <div className="text-2xl-font-bold text-white mb-1">{value}</div>
+                                    <div className="text-sm text-white/60">{label}</div>
+                                </motion.div>
+                            ))}
                         </div>
                     </motion.div>
                 </div>
