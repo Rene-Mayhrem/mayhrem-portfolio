@@ -7,7 +7,7 @@ import { Toast }  from './ui/toast';
 
 const Hero = () => {
   const [displayText, setDisplayText] = useState('');
-  const fullText = 'Senior DevOps & Cloud Engineer';
+  const fullText = 'Software Engineer & DevOps Junior';
 
   useEffect(() => {
     let index = 0;
@@ -77,7 +77,7 @@ const Hero = () => {
             transition={{ delay: 0.5 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
           >
-            Hi, I'm <span className="gradient-text">Rene</span>
+            Hi, I'm <span className="gradient-text">René Cruz</span>
           </motion.h1>
 
           <motion.div
