@@ -1,6 +1,7 @@
 
+import About from './components/About'
 import Header from './components/Header'
-import './App.css'
+import Hero from './components/Hero'
 import ParticleBackground from './components/ParticleBackground'
 
 function App() {
@@ -14,6 +15,10 @@ function App() {
       <div className="min-h-screen relative" style={{ perspective: '1200px' }}>
         <ParticleBackground />
         <Header />
+        <main className="relative z-10">
+          <Hero />
+          <About />
+        </main>
       </div>
     </>
   )
