@@ -32,7 +32,7 @@ const Hero = () => {
 
   const handleSocialClick = (platform) => {
     switch(platform) {
-        case 'Github':
+        case 'GitHub':
             window.open('https://github.com/Rene-Mayhrem', '_blank', 'noopener,noreferrer');
             break;
         case 'LinkedIn':
