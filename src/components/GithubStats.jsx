@@ -1,10 +1,18 @@
+/* eslint-disable no-constant-binary-expression */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Github, Star, GitCommit, GitPullRequest, Code, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  Github,
+  Star,
+  GitCommit,
+  GitPullRequest,
+  Code,
+  Calendar,
+} from "lucide-react";
 
 // Your GitHub username
-const GITHUB_USERNAME = 'Rene-Mayhrem'; 
+const GITHUB_USERNAME = "Rene-Mayhrem";
 
 // === 1. MODULAR COMPONENTS ===
 const StatCardSkeleton = () => (
@@ -22,9 +30,9 @@ const StatCard = ({ icon: Icon, label, value, color, index }) => (
     transition={{ duration: 0.6, delay: index * 0.1 }}
     viewport={{ once: true }}
     className="glass rounded-2xl p-6 text-center hover-lift transform-gpu"
-    style={{ transformStyle: 'preserve-3d' }}
+    style={{ transformStyle: "preserve-3d" }}
   >
-    <motion.div style={{ transform: 'translateZ(20px)' }}>
+    <motion.div style={{ transform: "translateZ(20px)" }}>
       <Icon className={`w-12 h-12 ${color} mx-auto mb-4`} />
       <div className="text-4xl font-bold text-primary-themed mb-2">{value}</div>
       <div className="text-md text-tertiary-themed">{label}</div>
@@ -39,28 +47,39 @@ const TopLanguagesSection = ({ topLanguages }) => (
     transition={{ duration: 0.8 }}
     viewport={{ once: true }}
     className="glass rounded-2xl p-8 transform-gpu"
-    style={{ transformStyle: 'preserve-3d' }}
+    style={{ transformStyle: "preserve-3d" }}
   >
-    <motion.div style={{ transform: 'translateZ(20px)' }}>
+    <motion.div style={{ transform: "translateZ(20px)" }}>
       <div className="flex items-center mb-6">
         <Code className="w-8 h-8 text-blue-300 mr-3" />
-        <h3 className="text-2xl font-bold text-primary-themed">Top Languages</h3>
+        <h3 className="text-2xl font-bold text-primary-themed">
+          Top Languages
+        </h3>
       </div>
       <p className="text-secondary-themed mb-6">
-        A breakdown of my most frequently used languages across public repositories.
+        A breakdown of my most frequently used languages across public
+        repositories.
       </p>
       <div className="space-y-4">
         <div className="flex w-full h-4 rounded-full overflow-hidden">
           {topLanguages.map((lang, index) => (
-            <div key={index} className={`bg-[${lang.color}]`} style={{ width: `${lang.percentage}%` }}></div>
+            <div
+              key={index}
+              className={`bg-[${lang.color}]`}
+              style={{ width: `${lang.percentage}%` }}
+            ></div>
           ))}
         </div>
         <div className="grid grid-cols-2 gap-x-4 gap-y-2">
           {topLanguages.map((lang, index) => (
             <div key={index} className="flex items-center text-sm">
-              <div className={`w-3 h-3 rounded-full bg-[${lang.color}] mr-2`}></div>
+              <div
+                className={`w-3 h-3 rounded-full bg-[${lang.color}] mr-2`}
+              ></div>
               <span className="text-primary-themed">{lang.name}</span>
-              <span className="ml-auto text-tertiary-themed">{lang.percentage}%</span>
+              <span className="ml-auto text-tertiary-themed">
+                {lang.percentage}%
+              </span>
             </div>
           ))}
         </div>
@@ -79,38 +98,79 @@ const GithubStats = () => {
   useEffect(() => {
     async function fetchGithubStats() {
       try {
-        const statsResponse = await fetch(`/api/github/api?username=${GITHUB_USERNAME}&count_private=true&show_icons=true&theme=dark`);
-        const statsData = await statsResponse.json();
-        
-        const langResponse = await fetch(`/api/github/api/top-langs/?username=${GITHUB_USERNAME}&layout=compact&hide=css,html&theme=dark`);
-        const langData = await langResponse.json();
+        // Fetch stats from the GitHub Readme Stats API
+        const statsResponse = await fetch(
+          `/api/github/api?username=${GITHUB_USERNAME}&count_private=true&show_icons=true&theme=dark`
+        );
 
-        if (statsData.error || langData.error) {
-          throw new Error('API returned an error.');
+        // Check if the response was successful before parsing JSON
+        if (!statsResponse.ok) {
+          throw new Error(
+            `GitHub Stats API responded with status: ${statsResponse.status}`
+          );
         }
 
+        const statsData = await statsResponse.json();
+
+        // Fetch top languages from the GitHub Top Languages API
+        const langResponse = await fetch(
+          `/api/github/api/top-langs/?username=${GITHUB_USERNAME}&layout=compact&hide=css,html&theme=dark`
+        );
+
+        // Check if the response was successful before parsing JSON
+        if (!langResponse.ok) {
+          throw new Error(
+            `GitHub Languages API responded with status: ${langResponse.status}`
+          );
+        }
+
+        const langData = await langResponse.json();
+
+        // ... (rest of your existing logic for updating stats and languages)
         const updatedStats = [
-          { icon: GitCommit, label: 'Total Commits', value: statsData.commits.total || 'N/A', color: 'text-green-400' },
-          { icon: GitPullRequest, label: 'Pull Requests', value: statsData.pull_requests.total || 'N/A', color: 'text-purple-400' },
-          { icon: Star, label: 'Stars Received', value: `${statsData.stargazers_count}+` || 'N/A', color: 'text-yellow-400' },
-          { icon: Github, label: 'Repositories', value: statsData.public_repos || 'N/A', color: 'text-blue-400' },
+          {
+            icon: GitCommit,
+            label: "Total Commits",
+            value: statsData.commits.total || "N/A",
+            color: "text-green-400",
+          },
+          {
+            icon: GitPullRequest,
+            label: "Pull Requests",
+            value: statsData.pull_requests.total || "N/A",
+            color: "text-purple-400",
+          },
+          {
+            icon: Star,
+            label: "Stars Received",
+            value: `${statsData.stargazers_count}+` || "N/A",
+            color: "text-yellow-400",
+          },
+          {
+            icon: Github,
+            label: "Repositories",
+            value: statsData.public_repos || "N/A",
+            color: "text-blue-400",
+          },
         ];
         setStats(updatedStats);
 
-        const updatedLanguages = Object.keys(langData).map(key => ({
-            name: langData[key].name,
-            percentage: Math.round(langData[key].percent),
-            color: langData[key].color
+        const updatedLanguages = Object.keys(langData).map((key) => ({
+          name: langData[key].name,
+          percentage: Math.round(langData[key].percent),
+          color: langData[key].color,
         }));
         setTopLanguages(updatedLanguages);
 
         setIsLoading(false);
+        setHasError(false); // Make sure to reset this on success
       } catch (error) {
         console.error("Failed to fetch GitHub stats:", error);
         setIsLoading(false);
         setHasError(true);
       }
     }
+
     fetchGithubStats();
   }, []);
 
@@ -119,14 +179,18 @@ const GithubStats = () => {
       <section id="github-stats" className="py-20 relative">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text animate-pulse">My Coding Footprint</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text animate-pulse">
+              My Coding Footprint
+            </h2>
             <p className="text-xl text-secondary-themed max-w-3xl mx-auto animate-pulse">
               A snapshot of my activity and contributions on GitHub.
             </p>
           </div>
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="grid grid-cols-2 gap-6">
-              {[...Array(4)].map((_, i) => <StatCardSkeleton key={i} />)}
+              {[...Array(4)].map((_, i) => (
+                <StatCardSkeleton key={i} />
+              ))}
             </div>
             <div className="glass rounded-2xl p-8 animate-pulse h-64"></div>
           </div>
@@ -140,7 +204,8 @@ const GithubStats = () => {
       <section id="github-stats" className="py-20 relative">
         <div className="container mx-auto px-4 text-center">
           <p className="text-xl text-red-500">
-            Failed to load GitHub stats. Please check your internet connection or try again later.
+            Failed to load GitHub stats. Please check your internet connection
+            or try again later.
           </p>
         </div>
       </section>
@@ -157,7 +222,9 @@ const GithubStats = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">My Coding Footprint</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
+            My Coding Footprint
+          </h2>
           <p className="text-xl text-secondary-themed max-w-3xl mx-auto">
             A snapshot of my activity and contributions on GitHub.
           </p>
@@ -181,25 +248,27 @@ const GithubStats = () => {
         >
           <div className="flex items-center mb-4 ml-2">
             <Calendar className="w-6 h-6 text-blue-300 mr-3" />
-            <h3 className="text-2xl font-bold text-primary-themed">Contribution Activity</h3>
+            <h3 className="text-2xl font-bold text-primary-themed">
+              Contribution Activity
+            </h3>
           </div>
           <div className="flex justify-center my-6">
-              <img 
-                  src={`https://github-readme-activity-graph.vercel.app/graph?username=${GITHUB_USERNAME}&theme=react-dark`} 
-                  alt="GitHub Activity Graph" 
-                  className="w-full max-w-4xl rounded-lg shadow-lg"
-              />
+            <img
+              src={`https://github-readme-activity-graph.vercel.app/graph?username=${GITHUB_USERNAME}&theme=react-dark`}
+              alt="GitHub Activity Graph"
+              className="w-full max-w-4xl rounded-lg shadow-lg"
+            />
           </div>
           <motion.a
-              href={`https://github.com/${GITHUB_USERNAME}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05 }}
-              className="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-2 text-md font-semibold rounded-full"
-            >
-              <Github className="w-5 h-5" />
-              Explore on GitHub
-            </motion.a>
+            href={`https://github.com/${GITHUB_USERNAME}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            className="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-2 text-md font-semibold rounded-full"
+          >
+            <Github className="w-5 h-5" />
+            Explore on GitHub
+          </motion.a>
         </motion.div>
       </div>
     </section>
