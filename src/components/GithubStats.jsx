@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Star, GitCommit, GitPullRequest, Code, Calendar } from 'lucide-react';
 
-// Your GitHub username
 const GITHUB_USERNAME = 'Rene-Mayhrem';
 
-
+// You do not need a proxy or netlify.toml for this.
+// GitHub's API has CORS headers, but be mindful of rate limits.
 
 // === 1. MODULAR COMPONENTS ===
 
@@ -35,7 +35,6 @@ const StatCard = ({ icon: Icon, label, value, color, index }) => (
 );
 
 const TopLanguagesSection = ({ topLanguages }) => {
-  // A color mapping for common languages
   const languageColors = {
     'JavaScript': '#f1e05a',
     'Python': '#3572A5',
@@ -106,72 +105,48 @@ const GithubStats = () => {
       try {
         const userResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
         const reposResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
-
-        if (!userResponse.ok || !reposResponse.ok) {
+        const commitsResponse = await fetch(`https://api.github.com/search/commits?q=author:${GITHUB_USERNAME}&per_page=1`);
+        
+        if (!userResponse.ok || !reposResponse.ok || !commitsResponse.ok) {
           throw new Error('Failed to fetch data from GitHub API.');
         }
 
         const userData = await userResponse.json();
         const reposData = await reposResponse.json();
+        const commitsData = await commitsResponse.json();
 
-        // Calculate total stats
         let totalStars = 0;
         let totalPullRequests = 0;
-        let totalCommits = 0;
-        const languageMap = {};
+        const languageBytes = {};
+        let totalBytes = 0;
 
-        // Iterate through repos to get data
         for (const repo of reposData) {
           if (!repo.fork) {
             totalStars += repo.stargazers_count;
             
-            // Note: Counting all commits directly is very slow. This is an approximation.
-            const commitsResponse = await fetch(repo.commits_url.replace('{/sha}', '') + '?per_page=1');
-            const linkHeader = commitsResponse.headers.get('link');
-            if (linkHeader) {
-              const matches = /&page=(\d+)>/.exec(linkHeader);
-              if (matches) {
-                totalCommits += parseInt(matches[1], 10);
-              }
-            }
-
-            // Get Pull Request count (also an approximation)
-            const prResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repo.name}/pulls?state=all&per_page=1`);
-            const prLinkHeader = prResponse.headers.get('link');
-            if (prLinkHeader) {
-              const prMatches = /&page=(\d+)>/.exec(prLinkHeader);
-              if (prMatches) {
-                totalPullRequests += parseInt(prMatches[1], 10);
-              }
+            const langRes = await fetch(repo.languages_url);
+            const langData = await langRes.json();
+            for(const lang in langData) {
+              languageBytes[lang] = (languageBytes[lang] || 0) + langData[lang];
+              totalBytes += langData[lang];
             }
           }
         }
         
-        // This is a separate call that returns a language breakdown by bytes, which is more accurate
-        const languagesResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
-        const languagesData = await languagesResponse.json();
-        
-        let totalBytes = 0;
-        const languageBytes = {};
-        for(const repo of languagesData) {
-            const langRes = await fetch(repo.languages_url);
-            const langData = await langRes.json();
-            for(const lang in langData) {
-                languageBytes[lang] = (languageBytes[lang] || 0) + langData[lang];
-                totalBytes += langData[lang];
-            }
-        }
+        // Count pull requests using the Link header method
+        const prResponse = await fetch(`https://api.github.com/search/issues?q=author:${GITHUB_USERNAME}+type:pr`);
+        const prData = await prResponse.json();
+        totalPullRequests = prData.total_count;
 
         // Sort languages by bytes and calculate percentage
         const sortedLanguages = Object.entries(languageBytes).sort(([, a], [, b]) => b - a);
         const updatedLanguages = sortedLanguages.slice(0, 5).map(([name, bytes]) => ({
             name,
             percentage: (bytes / totalBytes) * 100,
-            color: 'bg-gray-400' // Using a placeholder, a dedicated library could be used for colors
         }));
 
         const updatedStats = [
-          { icon: GitCommit, label: 'Total Commits', value: totalCommits, color: 'text-green-400' },
+          { icon: GitCommit, label: 'Total Commits', value: commitsData.total_count, color: 'text-green-400' },
           { icon: GitPullRequest, label: 'Pull Requests', value: totalPullRequests, color: 'text-purple-400' },
           { icon: Star, label: 'Stars Received', value: totalStars, color: 'text-yellow-400' },
           { icon: Github, label: 'Public Repositories', value: userData.public_repos, color: 'text-blue-400' },
@@ -205,6 +180,12 @@ const GithubStats = () => {
     return (
       <section id="github-stats" className="py-20 relative">
         <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text animate-pulse">My Coding Footprint</h2>
+            <p className="text-xl text-secondary-themed max-w-3xl mx-auto animate-pulse">
+              A snapshot of my activity and contributions on GitHub.
+            </p>
+          </div>
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="grid grid-cols-2 gap-6">
               {[...Array(4)].map((_, i) => <StatCardSkeleton key={i} />)}
