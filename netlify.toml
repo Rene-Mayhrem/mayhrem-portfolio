@@ -3,7 +3,7 @@
   publish = "dist"
 
 [[redirects]]
-  from = "/api/*"
+  from = "/github-proxy/*"
   to = "https://github-readme-stats.vercel.app/:splat"
   status = 200
   force = true

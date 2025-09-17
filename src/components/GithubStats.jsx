@@ -100,7 +100,7 @@ const GithubStats = () => {
       try {
         // Fetch stats from the GitHub Readme Stats API
         const statsResponse = await 
-        fetch(`/api/api?username=${GITHUB_USERNAME}&count_private=true&show_icons=true&theme=dark`);
+        fetch(`/github-proxy/api?username=${GITHUB_USERNAME}&count_private=true&show_icons=true&theme=dark`);
 
         // Check if the response was successful before parsing JSON
         if (!statsResponse.ok) {
@@ -113,7 +113,8 @@ const GithubStats = () => {
 
         // Fetch top languages from the GitHub Top Languages API
 
-        const langResponse = await fetch(`/api/api/top-langs/?username=${GITHUB_USERNAME}&layout=compact&hide=css,html&theme=dark`);
+        const langResponse = await 
+        fetch(`/github-proxy/api/top-langs/?username=${GITHUB_USERNAME}&layout=compact&hide=css,html&theme=dark`);
 
         // Check if the response was successful before parsing JSON
         if (!langResponse.ok) {
