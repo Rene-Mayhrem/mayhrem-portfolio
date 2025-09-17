@@ -1,8 +1,10 @@
 
 import About from './components/About'
+import GithubStats from './components/GithubStats'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import ParticleBackground from './components/ParticleBackground'
+import Skills from './components/Skills'
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
         <main className="relative z-10">
           <Hero />
           <About />
+          <Skills />
+          <GithubStats />
         </main>
       </div>
     </>
