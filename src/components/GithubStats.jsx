@@ -1,20 +1,14 @@
-/* eslint-disable no-constant-binary-expression */
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import {
-  Github,
-  Star,
-  GitCommit,
-  GitPullRequest,
-  Code,
-  Calendar,
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Github, Star, GitCommit, GitPullRequest, Code, Calendar } from 'lucide-react';
 
 // Your GitHub username
-const GITHUB_USERNAME = "Rene-Mayhrem";
+const GITHUB_USERNAME = 'Rene-Mayhrem';
+
+
 
 // === 1. MODULAR COMPONENTS ===
+
 const StatCardSkeleton = () => (
   <div className="glass rounded-2xl p-6 animate-pulse hover-lift">
     <div className="w-12 h-12 bg-gray-400/30 rounded-full mx-auto mb-4"></div>
@@ -30,9 +24,9 @@ const StatCard = ({ icon: Icon, label, value, color, index }) => (
     transition={{ duration: 0.6, delay: index * 0.1 }}
     viewport={{ once: true }}
     className="glass rounded-2xl p-6 text-center hover-lift transform-gpu"
-    style={{ transformStyle: "preserve-3d" }}
+    style={{ transformStyle: 'preserve-3d' }}
   >
-    <motion.div style={{ transform: "translateZ(20px)" }}>
+    <motion.div style={{ transform: 'translateZ(20px)' }}>
       <Icon className={`w-12 h-12 ${color} mx-auto mb-4`} />
       <div className="text-4xl font-bold text-primary-themed mb-2">{value}</div>
       <div className="text-md text-tertiary-themed">{label}</div>
@@ -40,55 +34,67 @@ const StatCard = ({ icon: Icon, label, value, color, index }) => (
   </motion.div>
 );
 
-const TopLanguagesSection = ({ topLanguages }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8 }}
-    viewport={{ once: true }}
-    className="glass rounded-2xl p-8 transform-gpu"
-    style={{ transformStyle: "preserve-3d" }}
-  >
-    <motion.div style={{ transform: "translateZ(20px)" }}>
-      <div className="flex items-center mb-6">
-        <Code className="w-8 h-8 text-blue-300 mr-3" />
-        <h3 className="text-2xl font-bold text-primary-themed">
-          Top Languages
-        </h3>
-      </div>
-      <p className="text-secondary-themed mb-6">
-        A breakdown of my most frequently used languages across public
-        repositories.
-      </p>
-      <div className="space-y-4">
-        <div className="flex w-full h-4 rounded-full overflow-hidden">
-          {topLanguages.map((lang, index) => (
-            <div
-              key={index}
-              className={`bg-[${lang.color}]`}
-              style={{ width: `${lang.percentage}%` }}
-            ></div>
-          ))}
-        </div>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-          {topLanguages.map((lang, index) => (
-            <div key={index} className="flex items-center text-sm">
-              <div
-                className={`w-3 h-3 rounded-full bg-[${lang.color}] mr-2`}
-              ></div>
-              <span className="text-primary-themed">{lang.name}</span>
-              <span className="ml-auto text-tertiary-themed">
-                {lang.percentage}%
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  </motion.div>
-);
+const TopLanguagesSection = ({ topLanguages }) => {
+  // A color mapping for common languages
+  const languageColors = {
+    'JavaScript': '#f1e05a',
+    'Python': '#3572A5',
+    'Java': '#b07219',
+    'TypeScript': '#2b7489',
+    'HTML': '#e34c26',
+    'CSS': '#563d7c',
+    'C++': '#f34b7d',
+    'C#': '#178600',
+    'PHP': '#4F5D95',
+    'Ruby': '#701516',
+  };
 
-// === 2. MAIN COMPONENT WITH IMPROVEMENTS ===
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+      className="glass rounded-2xl p-8 transform-gpu"
+      style={{ transformStyle: 'preserve-3d' }}
+    >
+      <motion.div style={{ transform: 'translateZ(20px)' }}>
+        <div className="flex items-center mb-6">
+          <Code className="w-8 h-8 text-blue-300 mr-3" />
+          <h3 className="text-2xl font-bold text-primary-themed">Top Languages</h3>
+        </div>
+        <p className="text-secondary-themed mb-6">
+          A breakdown of my most frequently used languages across public repositories.
+        </p>
+        <div className="space-y-4">
+          <div className="flex w-full h-4 rounded-full overflow-hidden">
+            {topLanguages.map((lang, index) => (
+              <div 
+                key={index} 
+                style={{ backgroundColor: languageColors[lang.name] || '#ccc', width: `${lang.percentage}%` }}
+              ></div>
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+            {topLanguages.map((lang, index) => (
+              <div key={index} className="flex items-center text-sm">
+                <div 
+                  className="w-3 h-3 rounded-full mr-2" 
+                  style={{ backgroundColor: languageColors[lang.name] || '#ccc' }}
+                ></div>
+                <span className="text-primary-themed">{lang.name}</span>
+                <span className="ml-auto text-tertiary-themed">{lang.percentage.toFixed(1)}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// === 2. MAIN COMPONENT WITH DIRECT GITHUB API CALLS ===
+
 const GithubStats = () => {
   const [stats, setStats] = useState([]);
   const [topLanguages, setTopLanguages] = useState([]);
@@ -98,71 +104,83 @@ const GithubStats = () => {
   useEffect(() => {
     async function fetchGithubStats() {
       try {
-        // Fetch stats from the GitHub Readme Stats API
-        const statsResponse = await 
-        fetch(`/github-proxy/api?username=${GITHUB_USERNAME}&show_icons=true&json=true`);
+        const userResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
+        const reposResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
 
-        // Check if the response was successful before parsing JSON
-        if (!statsResponse.ok) {
-          throw new Error(
-            `GitHub Stats API responded with status: ${statsResponse.status}`
-          );
+        if (!userResponse.ok || !reposResponse.ok) {
+          throw new Error('Failed to fetch data from GitHub API.');
         }
 
-        const statsData = await statsResponse.json();
+        const userData = await userResponse.json();
+        const reposData = await reposResponse.json();
 
-        // Fetch top languages from the GitHub Top Languages API
+        // Calculate total stats
+        let totalStars = 0;
+        let totalPullRequests = 0;
+        let totalCommits = 0;
+        const languageMap = {};
 
-        const langResponse = await 
-        fetch(`/github-proxy/api/top-langs/?username=${GITHUB_USERNAME}&layout=compact&hide=css,html&json=true`);
+        // Iterate through repos to get data
+        for (const repo of reposData) {
+          if (!repo.fork) {
+            totalStars += repo.stargazers_count;
+            
+            // Note: Counting all commits directly is very slow. This is an approximation.
+            const commitsResponse = await fetch(repo.commits_url.replace('{/sha}', '') + '?per_page=1');
+            const linkHeader = commitsResponse.headers.get('link');
+            if (linkHeader) {
+              const matches = /&page=(\d+)>/.exec(linkHeader);
+              if (matches) {
+                totalCommits += parseInt(matches[1], 10);
+              }
+            }
 
-        // Check if the response was successful before parsing JSON
-        if (!langResponse.ok) {
-          throw new Error(
-            `GitHub Languages API responded with status: ${langResponse.status}`
-          );
+            // Get Pull Request count (also an approximation)
+            const prResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repo.name}/pulls?state=all&per_page=1`);
+            const prLinkHeader = prResponse.headers.get('link');
+            if (prLinkHeader) {
+              const prMatches = /&page=(\d+)>/.exec(prLinkHeader);
+              if (prMatches) {
+                totalPullRequests += parseInt(prMatches[1], 10);
+              }
+            }
+          }
+        }
+        
+        // This is a separate call that returns a language breakdown by bytes, which is more accurate
+        const languagesResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
+        const languagesData = await languagesResponse.json();
+        
+        let totalBytes = 0;
+        const languageBytes = {};
+        for(const repo of languagesData) {
+            const langRes = await fetch(repo.languages_url);
+            const langData = await langRes.json();
+            for(const lang in langData) {
+                languageBytes[lang] = (languageBytes[lang] || 0) + langData[lang];
+                totalBytes += langData[lang];
+            }
         }
 
-        const langData = await langResponse.json();
+        // Sort languages by bytes and calculate percentage
+        const sortedLanguages = Object.entries(languageBytes).sort(([, a], [, b]) => b - a);
+        const updatedLanguages = sortedLanguages.slice(0, 5).map(([name, bytes]) => ({
+            name,
+            percentage: (bytes / totalBytes) * 100,
+            color: 'bg-gray-400' // Using a placeholder, a dedicated library could be used for colors
+        }));
 
-        // ... (rest of your existing logic for updating stats and languages)
         const updatedStats = [
-          {
-            icon: GitCommit,
-            label: "Total Commits",
-            value: statsData.commits.total || "N/A",
-            color: "text-green-400",
-          },
-          {
-            icon: GitPullRequest,
-            label: "Pull Requests",
-            value: statsData.pull_requests.total || "N/A",
-            color: "text-purple-400",
-          },
-          {
-            icon: Star,
-            label: "Stars Received",
-            value: `${statsData.stargazers_count}+` || "N/A",
-            color: "text-yellow-400",
-          },
-          {
-            icon: Github,
-            label: "Repositories",
-            value: statsData.public_repos || "N/A",
-            color: "text-blue-400",
-          },
+          { icon: GitCommit, label: 'Total Commits', value: totalCommits, color: 'text-green-400' },
+          { icon: GitPullRequest, label: 'Pull Requests', value: totalPullRequests, color: 'text-purple-400' },
+          { icon: Star, label: 'Stars Received', value: totalStars, color: 'text-yellow-400' },
+          { icon: Github, label: 'Public Repositories', value: userData.public_repos, color: 'text-blue-400' },
         ];
         setStats(updatedStats);
-
-        const updatedLanguages = Object.keys(langData).map((key) => ({
-          name: langData[key].name,
-          percentage: Math.round(langData[key].percent),
-          color: langData[key].color,
-        }));
         setTopLanguages(updatedLanguages);
-
+        
         setIsLoading(false);
-        setHasError(false); // Make sure to reset this on success
+        setHasError(false);
       } catch (error) {
         console.error("Failed to fetch GitHub stats:", error);
         setIsLoading(false);
@@ -171,25 +189,25 @@ const GithubStats = () => {
     }
 
     fetchGithubStats();
-  }, []);
+  }, [GITHUB_USERNAME]);
+
+  const GithubActivityGraph = () => (
+    <div className="flex justify-center my-6">
+      <img 
+        src={`https://github-readme-activity-graph.vercel.app/graph?username=${GITHUB_USERNAME}&theme=react-dark`} 
+        alt="GitHub Activity Graph" 
+        className="w-full max-w-4xl rounded-lg shadow-lg"
+      />
+    </div>
+  );
 
   if (isLoading) {
     return (
       <section id="github-stats" className="py-20 relative">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text animate-pulse">
-              My Coding Footprint
-            </h2>
-            <p className="text-xl text-secondary-themed max-w-3xl mx-auto animate-pulse">
-              A snapshot of my activity and contributions on GitHub.
-            </p>
-          </div>
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div className="grid grid-cols-2 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <StatCardSkeleton key={i} />
-              ))}
+              {[...Array(4)].map((_, i) => <StatCardSkeleton key={i} />)}
             </div>
             <div className="glass rounded-2xl p-8 animate-pulse h-64"></div>
           </div>
@@ -203,8 +221,7 @@ const GithubStats = () => {
       <section id="github-stats" className="py-20 relative">
         <div className="container mx-auto px-4 text-center">
           <p className="text-xl text-red-500">
-            Failed to load GitHub stats. Please check your internet connection
-            or try again later.
+            Failed to load GitHub stats. Please try again later.
           </p>
         </div>
       </section>
@@ -221,9 +238,7 @@ const GithubStats = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
-            My Coding Footprint
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">My Coding Footprint</h2>
           <p className="text-xl text-secondary-themed max-w-3xl mx-auto">
             A snapshot of my activity and contributions on GitHub.
           </p>
@@ -247,27 +262,19 @@ const GithubStats = () => {
         >
           <div className="flex items-center mb-4 ml-2">
             <Calendar className="w-6 h-6 text-blue-300 mr-3" />
-            <h3 className="text-2xl font-bold text-primary-themed">
-              Contribution Activity
-            </h3>
+            <h3 className="text-2xl font-bold text-primary-themed">Contribution Activity</h3>
           </div>
-          <div className="flex justify-center my-6">
-            <img
-              src={`https://github-readme-activity-graph.vercel.app/graph?username=${GITHUB_USERNAME}&theme=react-dark`}
-              alt="GitHub Activity Graph"
-              className="w-full max-w-4xl rounded-lg shadow-lg"
-            />
-          </div>
-          <motion.a
-            href={`https://github.com/${GITHUB_USERNAME}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            className="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-2 text-md font-semibold rounded-full"
-          >
-            <Github className="w-5 h-5" />
-            Explore on GitHub
-          </motion.a>
+          <GithubActivityGraph />
+           <motion.a
+              href={`https://github.com/${GITHUB_USERNAME}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              className="mt-6 btn-primary inline-flex items-center gap-2 px-6 py-2 text-md font-semibold rounded-full"
+            >
+              <Github className="w-5 h-5" />
+              Explore on GitHub
+            </motion.a>
         </motion.div>
       </div>
     </section>
