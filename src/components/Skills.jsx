@@ -50,8 +50,7 @@ const Skills = () => {
       color: 'from-orange-500 to-red-500',
       skills: [
         { name: 'GitHub Actions', level: 95 },
-        { name: 'ArgoCD', level: 90 },
-        { name: 'Jenkins', level: 80 }
+        { name: 'Jenkins', level: 90 },
       ]
     },
     {
@@ -69,7 +68,7 @@ const Skills = () => {
       icon: Code,
       color: 'from-indigo-500 to-blue-500',
       skills: [
-        { name: 'Go', level: 90 },
+        { name: 'Java', level: 90 },
         { name: 'Python', level: 85 },
         { name: 'Bash', level: 95 }
       ]
