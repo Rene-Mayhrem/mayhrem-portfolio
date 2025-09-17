@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Star, GitCommit, GitPullRequest, Code, Calendar } from 'lucide-react';
@@ -6,8 +7,6 @@ import { Github, Star, GitCommit, GitPullRequest, Code, Calendar } from 'lucide-
 const GITHUB_USERNAME = 'Rene-Mayhrem'; 
 
 // === 1. MODULAR COMPONENTS ===
-
-// Skeleton loader for a stat card
 const StatCardSkeleton = () => (
   <div className="glass rounded-2xl p-6 animate-pulse hover-lift">
     <div className="w-12 h-12 bg-gray-400/30 rounded-full mx-auto mb-4"></div>
@@ -16,7 +15,6 @@ const StatCardSkeleton = () => (
   </div>
 );
 
-// Individual Stat Card component
 const StatCard = ({ icon: Icon, label, value, color, index }) => (
   <motion.div
     initial={{ opacity: 0, y: 50, rotateX: -30 }}
@@ -34,7 +32,6 @@ const StatCard = ({ icon: Icon, label, value, color, index }) => (
   </motion.div>
 );
 
-// Top Languages Bar and Legend
 const TopLanguagesSection = ({ topLanguages }) => (
   <motion.div
     initial={{ opacity: 0, y: 50 }}
@@ -73,7 +70,6 @@ const TopLanguagesSection = ({ topLanguages }) => (
 );
 
 // === 2. MAIN COMPONENT WITH IMPROVEMENTS ===
-
 const GithubStats = () => {
   const [stats, setStats] = useState([]);
   const [topLanguages, setTopLanguages] = useState([]);
@@ -83,13 +79,12 @@ const GithubStats = () => {
   useEffect(() => {
     async function fetchGithubStats() {
       try {
-        const statsResponse = await fetch(`https://github-readme-stats.vercel.app/api?username=${GITHUB_USERNAME}&count_private=true&show_icons=true&theme=dark`);
+        const statsResponse = await fetch(`/api/github/api?username=${GITHUB_USERNAME}&count_private=true&show_icons=true&theme=dark`);
         const statsData = await statsResponse.json();
         
-        const langResponse = await fetch(`https://github-readme-stats.vercel.app/api/top-langs/?username=${GITHUB_USERNAME}&layout=compact&hide=css,html&theme=dark`);
+        const langResponse = await fetch(`/api/github/api/top-langs/?username=${GITHUB_USERNAME}&layout=compact&hide=css,html&theme=dark`);
         const langData = await langResponse.json();
 
-        // Check for API errors
         if (statsData.error || langData.error) {
           throw new Error('API returned an error.');
         }
@@ -105,7 +100,6 @@ const GithubStats = () => {
         const updatedLanguages = Object.keys(langData).map(key => ({
             name: langData[key].name,
             percentage: Math.round(langData[key].percent),
-            // The API returns hex codes, so we pass them directly to the style attribute
             color: langData[key].color
         }));
         setTopLanguages(updatedLanguages);
@@ -120,7 +114,6 @@ const GithubStats = () => {
     fetchGithubStats();
   }, []);
 
-  // Show skeleton loaders while data is fetching
   if (isLoading) {
     return (
       <section id="github-stats" className="py-20 relative">
@@ -142,7 +135,6 @@ const GithubStats = () => {
     );
   }
 
-  // Handle API fetching errors
   if (hasError) {
     return (
       <section id="github-stats" className="py-20 relative">
@@ -155,7 +147,6 @@ const GithubStats = () => {
     );
   }
 
-  // Main content after data is loaded
   return (
     <section id="github-stats" className="py-20 relative">
       <div className="container mx-auto px-4">
