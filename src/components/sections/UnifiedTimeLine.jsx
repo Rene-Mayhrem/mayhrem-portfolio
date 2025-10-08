@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { timeline } from '../../data/Experience'
-import UnifiedTimelineCard from './UnifiedTimelineCard';
+import UnifiedTimelineCard from '../layout/UnifiedTimeLineCard';
 
 const UnifiedTimeline = () => {
   const sortedTimeline = [...timeline].sort(
