@@ -1,12 +1,14 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { FiBriefcase, FiGraduationCap } from 'react-icons/fi';
+import { BriefcaseIcon, GraduationCap } from 'lucide-react';
+
+
 
 const UnifiedTimelineCard = ({ item, isLast, index }) => {
   const lineRef = useRef(null);
   const inView = useInView(lineRef, { margin: '-50px', once: true });
 
-  const DotIcon = item.type === 'work' ? FiBriefcase : FiGraduationCap;
+  const DotIcon = item.type === 'work' ? BriefcaseIcon : GraduationCap;
   const color = item.type === 'work' ? 'bg-blue-400' : 'bg-purple-400';
 
   const isLeft = index % 2 === 0;
