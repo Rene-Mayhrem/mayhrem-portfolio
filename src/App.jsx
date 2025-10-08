@@ -5,6 +5,7 @@ import Header from './components/layout/Header'
 import Hero from './components/sections/Hero'
 import ParticleBackground from './components/ParticleBackground'
 import Skills from './components/sections/Skills'
+import UnifiedTimeline from './components/sections/UnifiedTimeLine'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <About />
           <Skills />
           <GithubStats />
+          <UnifiedTimeline />
         </main>
       </div>
     </>
