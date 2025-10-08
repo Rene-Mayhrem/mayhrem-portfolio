@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { timeline } from '../data/timeline';
+import { timeline } from '../../data/Experience'
 import UnifiedTimelineCard from './UnifiedTimelineCard';
 
 const UnifiedTimeline = () => {
