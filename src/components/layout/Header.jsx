@@ -2,8 +2,8 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Cloud, Menu, Moon, Sun, X, Zap } from "lucide-react";
-import Button from "./ui/button";
-import { useTheme } from "../lib/useTheme";
+import Button from "../ui/button";
+import { useTheme } from "../../lib/useTheme";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
