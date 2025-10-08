@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Github, Linkedin, Mail, Terminal } from 'lucide-react';
-import Button from './ui/button';
-import { Toast }  from './ui/toast';
+import Button from '../ui/button';
+import { Toast }  from '../ui/toast';
 
 const Hero = () => {
   const [displayText, setDisplayText] = useState('');

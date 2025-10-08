@@ -1,10 +1,10 @@
 
-import About from './components/About'
+import About from './components/sections/About'
 import GithubStats from './components/GithubStats'
-import Header from './components/Header'
-import Hero from './components/Hero'
+import Header from './components/layout/Header'
+import Hero from './components/sections/Hero'
 import ParticleBackground from './components/ParticleBackground'
-import Skills from './components/Skills'
+import Skills from './components/sections/Skills'
 
 function App() {
 

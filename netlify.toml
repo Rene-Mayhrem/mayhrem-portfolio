@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/github-proxy/*"
+  to = "https://github-readme-stats.vercel.app/:splat"
+  status = 200
+  force = true
